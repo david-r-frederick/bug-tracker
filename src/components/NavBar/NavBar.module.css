@@ -1,0 +1,15 @@
+.topRightNavBarSection {
+  position: absolute;
+  right: 10px;
+}
+
+.topRightNavBarSection li {
+  margin-left: 5px;
+  margin-left: 5px;
+}
+
+@media (max-width: 691px) {
+  .topRightNavBarSection {
+    position: relative;
+  }
+}

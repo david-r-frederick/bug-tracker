@@ -1,0 +1,15 @@
+.tableHeadBtn {
+  font-weight: bold;
+  text-align: left;
+  white-space: nowrap;
+  padding-left: 0;
+  display: flex;
+  align-items: center;
+}
+
+.columnHeadText {
+  padding-right: 10px;
+  margin-bottom: 0px;
+}
+
+/* @media (min-width: ) */

@@ -1,0 +1,9 @@
+.btnContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.editScreenBtn {
+  margin: 0 1rem;
+}

@@ -1,0 +1,13 @@
+.btnContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.submitBtn {
+  margin: 0 1rem;
+}
+
+.cancelBtn {
+  margin: 0 1rem;
+}
