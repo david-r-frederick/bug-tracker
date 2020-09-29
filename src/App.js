@@ -24,6 +24,7 @@ import MainFlowFooter from './components/MainFlowFooter';
 import PasswordReset from './containers/PasswordReset/PasswordReset';
 import Settings from './containers/Settings/Settings';
 import Reports from './containers/Reports/Reports';
+import { toggleSideNav } from './appActions';
 
 class App extends Component {
     componentDidMount() {
@@ -100,7 +101,14 @@ class App extends Component {
                     <NavBar />
                     <div id="layoutSidenav">
                         <SideNavMain />
-                        <div id="layoutSidenav_content">
+                        <div 
+                          id="layoutSidenav_content"
+                          onClick={() => {
+                            if (document.body.classList.contains('sb-sidenav-toggled') && window.innerWidth < 992) {
+                              toggleSideNav();
+                            }
+                          }}
+                        >
                             <main>
                                 <div className="container-fluid">
                                     <Switch>

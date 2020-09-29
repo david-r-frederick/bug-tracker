@@ -4,7 +4,8 @@ import 'firebase/auth';
 import { REMOVE_REDUX_USER } from '../../store/actions/actionTypes';
 import { connect } from 'react-redux';
 import classes from './NavBar.module.css';
-import { Link, Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { toggleSideNav } from '../../appActions';
 
 class NavBar extends Component {
     state = {
@@ -39,7 +40,9 @@ class NavBar extends Component {
 
     render() {
         return (
-            <nav className={`sb-topnav navbar navbar-expand navbar-${this.props.colorTheme} bg-${this.props.colorTheme}`}>
+            <nav
+                className={`sb-topnav navbar navbar-expand navbar-${this.props.colorTheme} bg-${this.props.colorTheme}`}
+            >
                 <a className="navbar-brand" href="/dashboard">
                     Bug Tracker
                 </a>
@@ -47,15 +50,7 @@ class NavBar extends Component {
                     className={`btn btn-link btn-sm order-1 order-lg-0 ${classes.submitBtn}`}
                     id="sidebarToggle"
                     href="/"
-                    onClick={() => {
-                        if (document.body.classList.contains('sb-nav-fixed')) {
-                            document.body.classList.remove('sb-nav-fixed');
-                            document.body.classList.add('sb-sidenav-toggled');
-                        } else {
-                            document.body.classList.remove('sb-sidenav-toggled');
-                            document.body.classList.add('sb-nav-fixed');
-                        }
-                    }}
+                    onClick={toggleSideNav}
                 >
                     <i className="fas fa-bars"></i>
                 </button>

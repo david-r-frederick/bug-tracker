@@ -279,7 +279,7 @@ class EditBug extends Component {
                                     }
                                 }}
                                 type="button"
-                                className={`btn btn-primary ${classes.editScreenBtn}`}
+                                className={`btn btn-outline-primary ${classes.editScreenBtn}`}
                             >
                                 Submit
                             </button>
@@ -289,7 +289,7 @@ class EditBug extends Component {
                                     this.setState({ showModal: true });
                                 }}
                                 type="button"
-                                className={`btn btn-danger ${classes.editScreenBtn}`}
+                                className={`btn btn-outline-danger ${classes.editScreenBtn}`}
                             >
                                 Delete
                             </button>
@@ -299,7 +299,7 @@ class EditBug extends Component {
                                     this.setState({ redirect: '/my-bugs' });
                                 }}
                                 type="button"
-                                className={`btn btn-secondary ${classes.editScreenBtn}`}
+                                className={`btn btn-outline-secondary ${classes.editScreenBtn}`}
                             >
                                 Cancel
                             </button>

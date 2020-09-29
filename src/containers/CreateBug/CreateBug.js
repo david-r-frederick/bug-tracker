@@ -210,7 +210,7 @@ class CreateBug extends Component {
                                     }
                                 }}
                                 type="button"
-                                className={`btn btn-primary ${classes.submitBtn}`}
+                                className={`btn btn-outline-primary ${classes.submitBtn}`}
                             >
                                 Submit
                             </button>
@@ -220,7 +220,7 @@ class CreateBug extends Component {
                                     this.setState({ redirect: '/my-bugs' });
                                 }}
                                 type="button"
-                                className={`btn btn-secondary ${classes.cancelBtn}`}
+                                className={`btn btn-outline-secondary ${classes.cancelBtn}`}
                             >
                                 Cancel
                             </button>

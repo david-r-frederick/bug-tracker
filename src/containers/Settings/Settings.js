@@ -6,41 +6,25 @@ import { CHANGE_COLOR_THEME } from '../../store/actions/actionTypes';
 class Settings extends Component {
     state = {
         email: '',
+        responseMessage: '',
+        error: false,
         darkTheme: true,
     };
 
     makeUserAdmin = () => {
         const addAdminRole = firebase.functions().httpsCallable('addAdminRole');
-        addAdminRole({ email: this.state.email })
-            .then((result) => console.log(result))
-            .catch((err) => console.log(err));
+        addAdminRole({ email: this.state.email }).then((result) => {
+            console.log(result);
+            if (result.data.message) {
+                this.setState({ responseMessage: result.data.message });
+            } else {
+                this.setState({
+                    responseMessage: result.data.errorInfo.message,
+                    error: true,
+                });
+            }
+        });
     };
-
-    //would filter make admin ability
-    // renderMakeAdminBlock = () => {
-    //     if (this.props.isAdmin) {
-    //         return (
-    //             <div className="form-row">
-    //                 <div className="col-lg-6 mt-2">
-    //                     <label className="small mb-1">Make someone an admin</label>
-    //                     <input
-    //                         className="form-control py-4"
-    //                         placeholder="Enter an email address"
-    //                         value={this.state.email}
-    //                         onChange={(event) => this.setState({ email: event.target.value })}
-    //                     ></input>
-    //                 </div>
-    //                 <div className={`col-lg-6 mb-1 d-flex align-items-end`}>
-    //                     <button onClick={this.makeUserAdmin} className={`btn btn-warning`}>
-    //                         Make Admin
-    //                     </button>
-    //                 </div>
-    //             </div>
-    //         );
-    //     } else {
-    //         return <h4>Settings options will go here</h4>;
-    //     }
-    // };
 
     render() {
         return (
@@ -55,7 +39,7 @@ class Settings extends Component {
                                 </strong>
                             </div>
                             <div className="col-md-8 mt-4">
-                                <p>David Frederick</p>
+                                <p>{this.props.displayName}</p>
                             </div>
                         </div>
                         <div className="form-row">
@@ -65,7 +49,7 @@ class Settings extends Component {
                                 </strong>
                             </div>
                             <div className="col-md-8 mt-4">
-                                <p>dfrederick79@gmail.com</p>
+                                <p>{this.props.user.email}</p>
                             </div>
                         </div>
                         <div className="form-row">
@@ -97,16 +81,30 @@ class Settings extends Component {
                                     className="form-control py-4"
                                     placeholder="Enter an email address"
                                     value={this.state.email}
-                                    onChange={(event) => this.setState({ email: event.target.value })}
+                                    onChange={(event) => {
+                                        this.setState({
+                                            email: event.target.value,
+                                            responseMessage: '',
+                                            error: false,
+                                        });
+                                    }}
                                 ></input>
                             </div>
                             <div className={`col-md-8 mb-1 d-flex align-items-end`}>
-                                <button 
-                                onClick={this.makeUserAdmin} className={`btn btn-warning mt-2`}>
+                                <button onClick={this.makeUserAdmin} className={`btn btn-warning mt-2`}>
                                     Make Admin
                                 </button>
                             </div>
                         </div>
+                        {this.state.responseMessage ? (
+                            <div className="form-row">
+                                <div className="col-md-6">
+                                    <p className={`alert alert-${this.state.error ? 'danger' : 'success'} mt-2`}>
+                                        {this.state.responseMessage}
+                                    </p>
+                                </div>
+                            </div>
+                        ) : null}
                     </div>
                 </div>
             </Fragment>
@@ -118,6 +116,8 @@ const mapStateToProps = (state) => {
     return {
         isAdmin: state.auth.isAdmin,
         colorTheme: state.theme.color,
+        user: state.auth.user,
+        displayName: state.auth.displayName,
     };
 };
 
