@@ -8,10 +8,11 @@ import { Spinner } from '../../components/common';
 
 class Login extends Component {
     state = {
-        email: 'dfrederick79@gmail.com',
-        password: 'password',
+        email: '',
+        password: '',
         errorMessage: '',
         loading: false,
+        rememberPassword: false,
     };
 
     render() {
@@ -27,81 +28,103 @@ class Login extends Component {
                                             <h3 className="text-center font-weight-light my-4">Login</h3>
                                         </div>
                                         <div className="card-body">
-                                            {this.state.loading ? <Spinner /> :<form>
-                                                <AuthInput
-                                                    auth
-                                                    size="full"
-                                                    title="Email"
-                                                    id="inputEmailAddress"
-                                                    placeholder="Enter email address"
-                                                    ariaDescribedBy="emailHelp"
-                                                    type="email"
-                                                    value={this.state.email}
-                                                    onChange={(event) => {
-                                                        this.setState({
-                                                            email: event.target.value,
-                                                        });
-                                                    }}
-                                                />
-                                                <AuthInput
-                                                    auth
-                                                    size="full"
-                                                    title="Password"
-                                                    id="inputPassword"
-                                                    placeholder="Enter password"
-                                                    type="password"
-                                                    value={this.state.password}
-                                                    onChange={(event) => {
-                                                        this.setState({
-                                                            password: event.target.value,
-                                                        });
-                                                    }}
-                                                />
-                                                <div className="form-group">
-                                                    <div className="custom-control custom-checkbox">
-                                                        <input
-                                                            className="custom-control-input"
-                                                            id="rememberPasswordCheck"
-                                                            type="checkbox"
-                                                        />
-                                                        <label
-                                                            className="custom-control-label"
-                                                            htmlFor="rememberPasswordCheck"
-                                                        >
-                                                            Remember password
-                                                        </label>
+                                            {this.state.loading ? (
+                                                <Spinner />
+                                            ) : (
+                                                <form>
+                                                    <AuthInput
+                                                        auth
+                                                        size="full"
+                                                        title="Email"
+                                                        id="inputEmailAddress"
+                                                        placeholder="Enter email address"
+                                                        ariaDescribedBy="emailHelp"
+                                                        type="email"
+                                                        value={this.state.email}
+                                                        onChange={(event) => {
+                                                            this.setState({
+                                                                email: event.target.value,
+                                                            });
+                                                        }}
+                                                    />
+                                                    <AuthInput
+                                                        auth
+                                                        size="full"
+                                                        title="Password"
+                                                        id="inputPassword"
+                                                        placeholder="Enter password"
+                                                        type="password"
+                                                        value={this.state.password}
+                                                        onChange={(event) => {
+                                                            this.setState({
+                                                                password: event.target.value,
+                                                            });
+                                                        }}
+                                                    />
+                                                    <div className="form-group">
+                                                        <div className="custom-control custom-checkbox">
+                                                            <input
+                                                                className="custom-control-input"
+                                                                id="rememberPasswordCheck"
+                                                                type="checkbox"
+                                                                onChange={(event) => {
+                                                                    this.setState((prevState) => {
+                                                                        return {
+                                                                            rememberPassword: !prevState.rememberPassword,
+                                                                        };
+                                                                    });
+                                                                }}
+                                                            />
+                                                            <label
+                                                                className="custom-control-label"
+                                                                htmlFor="rememberPasswordCheck"
+                                                            >
+                                                                Remember password
+                                                            </label>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                {this.state.errorMessage ? (
-                                                    <p className="mt-3 text-danger">{this.state.errorMessage}</p>
-                                                ) : null}
-                                                <div className="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
-                                                    <a className="small" href="password.html">
-                                                        Forgot Password?
-                                                    </a>
-                                                    <button
-                                                        className="btn btn-primary"
-                                                        onClick={(event) => {
-                                                            event.preventDefault();
-                                                            this.setState({ loading: true });
-                                                            firebase
-                                                                .auth()
-                                                                .signInWithEmailAndPassword(
+                                                    {this.state.errorMessage ? (
+                                                        <p className="mt-3 text-danger">{this.state.errorMessage}</p>
+                                                    ) : null}
+                                                    <div className="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
+                                                        <Link className="small" to="/pwreset">
+                                                            Forgot Password?
+                                                        </Link>
+                                                        <button
+                                                            className="btn btn-primary"
+                                                            onClick={(event) => {
+                                                                event.preventDefault();
+                                                                this.setState({ loading: true });
+                                                                const auth = firebase.auth();
+                                                                if (this.state.rememberPassword) {
+                                                                    auth.setPersistence(
+                                                                        firebase.auth.Auth.Persistence.LOCAL
+                                                                    )
+                                                                        .then(() => console.log('PERSISTENCE: LOCAL'))
+                                                                        .catch((err) => console.log(err.message));
+                                                                } else {
+                                                                    auth.setPersistence(
+                                                                        firebase.auth.Auth.Persistence.SESSION
+                                                                    )
+                                                                        .then(() => console.log('PERSISTENCE: SESSION'))
+                                                                        .catch((err) => console.log(err.message));
+                                                                }
+                                                                auth.signInWithEmailAndPassword(
                                                                     this.state.email,
                                                                     this.state.password
-                                                                )
-                                                                .catch((err) => {
+                                                                ).catch((err) => {
                                                                     this.setState({
                                                                         errorMessage: err.message,
                                                                         loading: false,
                                                                     });
                                                                 });
-                                                        }}
-                                                    >
-                                                        Login
-                                                    </button>
-                                                </div>
-                                            </form>}
+                                                            }}
+                                                        >
+                                                            Login
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            )}
                                         </div>
                                         <div className="card-footer text-center">
                                             <div className="small">

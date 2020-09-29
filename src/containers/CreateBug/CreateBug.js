@@ -4,7 +4,7 @@ import firebase from 'firebase';
 import classes from './CreateBug.module.css';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { ADD_USER_TICKET } from '../../store/actions/actionTypes';
+import { ADD_USER_TICKET, CLEAR_LOCAL_TICKETS } from '../../store/actions/actionTypes';
 
 class CreateBug extends Component {
     state = {
@@ -19,6 +19,7 @@ class CreateBug extends Component {
         redirect: null,
         formIncomplete: false,
         missingFields: [],
+        status: 'New',
     };
 
     submitTicketHandler = (id, user) => {
@@ -30,6 +31,7 @@ class CreateBug extends Component {
             assignedToId,
             longDescription,
             stepsToReproduce,
+            status,
         } = this.state;
         const database = firebase.database();
         database
@@ -46,10 +48,11 @@ class CreateBug extends Component {
                 submittedBy: this.props.user.displayName,
                 submittedById: this.props.user.uid,
                 timeSubmitted: new Date().toString().substring(0, 24),
+                status,
             })
-            // .then(() => {
-            //     this.props.onClearLocalTickets();
-            // })
+            .then(() => {
+                this.props.onClearLocalTickets();
+            })
             .then(() => {
                 database.ref(`tickets`).on('value', (snapShot) => {
                     snapShot.forEach((snap) => {
@@ -86,16 +89,10 @@ class CreateBug extends Component {
                 })
                 .every((el) => el)
         ) {
-            this.submitTicketHandler(
-                //Ensures a zero can be passed for the ticket id
-                this.props.tickets.length ? +this.props.tickets[this.props.tickets.length - 1].id + 1 : 0,
-                this.props.user
-            );
+            return true;
         } else {
-            this.setState({
-                formIncomplete: true,
-                missingFields: missingFieldsTitles,
-            });
+            this.setState({ missingFields: missingFieldsTitles });
+            return false;
         }
     };
 
@@ -120,15 +117,17 @@ class CreateBug extends Component {
                         <div className="form-row">
                             <Input
                                 title="Name of Bug"
+                                required={true}
                                 id="bugName"
                                 type="text"
                                 placeholder=""
                                 onChange={(event) => this.setState({ bugName: event.target.value })}
                                 value={this.state.bugName}
                                 size="half"
-                            />
+                                />
                             <Input
                                 title="Short Description"
+                                required={true}
                                 id="shortDescription"
                                 type="text"
                                 placeholder=""
@@ -142,6 +141,7 @@ class CreateBug extends Component {
                         <div className="form-row">
                             <Select
                                 title="Severity"
+                                required={true}
                                 onChange={(event) => {
                                     this.setState({ severity: event.target.value });
                                 }}
@@ -179,6 +179,7 @@ class CreateBug extends Component {
                         <div className="form-row">
                             <TextArea
                                 title="Steps to Reproduce"
+                                required={true}
                                 id="stepsToReproduce"
                                 type="text"
                                 placeholder=""
@@ -194,7 +195,19 @@ class CreateBug extends Component {
                             <button
                                 onClick={(event) => {
                                     event.preventDefault();
-                                    this.checkFormValidity();
+                                    if (this.checkFormValidity()) {
+                                        this.submitTicketHandler(
+                                            // covers situation where there are no tickets
+                                            this.props.tickets.length
+                                                ? +this.props.tickets[this.props.tickets.length - 1].id + 1
+                                                : 1,
+                                            this.props.user
+                                        );
+                                    } else {
+                                        this.setState({
+                                            formIncomplete: true
+                                        });
+                                    }
                                 }}
                                 type="button"
                                 className={`btn btn-primary ${classes.submitBtn}`}
@@ -207,18 +220,9 @@ class CreateBug extends Component {
                                     this.setState({ redirect: '/my-bugs' });
                                 }}
                                 type="button"
-                                className={`btn btn-default ${classes.cancelBtn}`}
+                                className={`btn btn-secondary ${classes.cancelBtn}`}
                             >
                                 Cancel
-                            </button>
-                            <button
-                                onClick={(event) => {
-                                    event.preventDefault();
-                                    console.log(this.props.tickets);
-                                }}
-                                className="btn btn-warning"
-                            >
-                                Log Tickets
                             </button>
                         </div>
                     </form>
@@ -239,7 +243,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         onAddUserTicket: (ticket) => dispatch({ type: ADD_USER_TICKET, payload: { ticket } }),
-        // onClearLocalTickets: () => dispatch({ type: CLEAR_LOCAL_TICKETS }),
+        onClearLocalTickets: () => dispatch({ type: CLEAR_LOCAL_TICKETS }),
     };
 };
 

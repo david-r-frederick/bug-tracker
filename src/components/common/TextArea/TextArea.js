@@ -5,7 +5,7 @@ export const TextArea = (props) => {
 
     return (
         <div className={`col-md-12 my-3`}>
-            <h5>{title}</h5>
+            <h5>{title}{props.required ? '*' : null}</h5>
             <textarea
                 className="form-control py-2"
                 rows="4"

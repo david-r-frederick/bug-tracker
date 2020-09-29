@@ -6,7 +6,7 @@ export const Input = (props) => {
 
     return (
         <div className={`${widthClass} my-3`}>
-            <h5>{title}</h5>
+            <h5>{title}{props.required ? '*': null}</h5>
             <input
                 className="form-control py-4"
                 aria-describedby={props.ariaDescribedBy}

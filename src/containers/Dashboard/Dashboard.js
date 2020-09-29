@@ -15,7 +15,9 @@ class Dashboard extends Component {
                     <Card title="Success Card" linkText="View Details" type="success" />
                     <Card title="Danger Card" linkText="View Details" type="danger" /> */}
                 {/* </div> */}
-                <TicketsTable />
+                <TicketsTable
+                  noTicketsMessage={`There are no tickets to display. Click "Submit New Bug" above to create a new ticket`}
+                />
             </Fragment>
         );
     }

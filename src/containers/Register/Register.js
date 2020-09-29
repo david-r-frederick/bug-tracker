@@ -39,133 +39,140 @@ class Register extends Component {
                                             <h3 className="text-center font-weight-light my-4">Create Account</h3>
                                         </div>
                                         <div className="card-body">
-                                            {this.state.loading ? <Spinner /> : <form>
-                                                <div className="form-row">
-                                                    <AuthInput
-                                                        size="half"
-                                                        title="First Name Test"
-                                                        id="inputFirstName"
-                                                        placeholder="Enter First Name"
-                                                        type="text"
-                                                        value={this.state.firstName}
-                                                        onChange={(event) => {
-                                                            this.checkIfValid();
-                                                            this.setState({
-                                                                firstName: event.target.value,
-                                                            });
-                                                        }}
-                                                    />
-                                                    <AuthInput
-                                                        size="half"
-                                                        title="Last Name"
-                                                        id="inputLastName"
-                                                        placeholder="Enter Last Name"
-                                                        type="text"
-                                                        value={this.state.lastName}
-                                                        onChange={(event) => {
-                                                            this.checkIfValid();
-                                                            this.setState({
-                                                                lastName: event.target.value,
-                                                            });
-                                                        }}
-                                                    />
-                                                </div>
-                                                <div className="form-row">
-                                                  <AuthInput
-                                                      size="full"
-                                                      title="Email"
-                                                      id="inputEmailAddress"
-                                                      placeholder="Enter email address"
-                                                      ariaDescribedBy="emailHelp"
-                                                      type="email"
-                                                      value={this.state.email}
-                                                      onChange={(event) => {
-                                                          this.checkIfValid();
-                                                          this.setState({
-                                                              email: event.target.value,
-                                                          });
-                                                      }}
-                                                  />
-                                                </div>
-                                                <div className="form-row">
-                                                    <AuthInput
-                                                        size="half"
-                                                        title="Password"
-                                                        id="inputPassword"
-                                                        placeholder="Enter password"
-                                                        type="password"
-                                                        value={this.state.password}
-                                                        onChange={(event) => {
-                                                            this.checkIfValid();
-                                                            this.setState({
-                                                                password: event.target.value,
-                                                            });
-                                                        }}
-                                                    />
-                                                    <AuthInput
-                                                        size="half"
-                                                        title="Confirm Password"
-                                                        id="inputConfirmPassword"
-                                                        placeholder="Confirm password"
-                                                        type="password"
-                                                        value={this.state.confirmPassword}
-                                                        onChange={(event) => {
-                                                            this.checkIfValid();
-                                                            this.setState({
-                                                                confirmPassword: event.target.value,
-                                                            });
-                                                        }}
-                                                    />
-                                                </div>
-                                                <div className="form-group mt-4 mb-0">
-                                                    <button
-                                                        className="btn btn-primary btn-block"
-                                                        onClick={(event) => {
-                                                            event.preventDefault();
-                                                            this.setState({ loading: true });
-                                                            if (!this.state.isValid) {
+                                            {this.state.loading ? (
+                                                <Spinner />
+                                            ) : (
+                                                <form>
+                                                    <div className="form-row">
+                                                        <AuthInput
+                                                            size="half"
+                                                            title="First Name Test"
+                                                            id="inputFirstName"
+                                                            placeholder="Enter First Name"
+                                                            type="text"
+                                                            value={this.state.firstName}
+                                                            onChange={(event) => {
+                                                                this.checkIfValid();
                                                                 this.setState({
-                                                                    errorMessage: 'All fields must be filled.',
-                                                                    loading: false,
+                                                                    firstName: event.target.value,
                                                                 });
-                                                                return;
-                                                            }
-                                                            if (this.state.password === this.state.confirmPassword) {
-                                                                firebase
-                                                                    .auth()
-                                                                    .createUserWithEmailAndPassword(
-                                                                        this.state.email,
-                                                                        this.state.password
-                                                                    )
-                                                                    .then((response) => {
-                                                                        this.props.onSetDisplayName(
-                                                                            `${this.state.firstName} ${this.state.lastName}`
-                                                                        );
-                                                                        response.user.updateProfile({
-                                                                            displayName: `${this.state.firstName} ${this.state.lastName}`,
-                                                                        });
-                                                                    })
-                                                                    .catch((err) => {
-                                                                        console.log(err.message);
-                                                                        this.setState({
-                                                                            errorMessage: err.message,
-                                                                            loading: false,
-                                                                        });
+                                                            }}
+                                                        />
+                                                        <AuthInput
+                                                            size="half"
+                                                            title="Last Name"
+                                                            id="inputLastName"
+                                                            placeholder="Enter Last Name"
+                                                            type="text"
+                                                            value={this.state.lastName}
+                                                            onChange={(event) => {
+                                                                this.checkIfValid();
+                                                                this.setState({
+                                                                    lastName: event.target.value,
+                                                                });
+                                                            }}
+                                                        />
+                                                    </div>
+                                                    <div className="form-row">
+                                                        <AuthInput
+                                                            size="full"
+                                                            title="Email"
+                                                            id="inputEmailAddress"
+                                                            placeholder="Enter email address"
+                                                            ariaDescribedBy="emailHelp"
+                                                            type="email"
+                                                            value={this.state.email}
+                                                            onChange={(event) => {
+                                                                this.checkIfValid();
+                                                                this.setState({
+                                                                    email: event.target.value,
+                                                                });
+                                                            }}
+                                                        />
+                                                    </div>
+                                                    <div className="form-row">
+                                                        <AuthInput
+                                                            size="half"
+                                                            title="Password"
+                                                            id="inputPassword"
+                                                            placeholder="Enter password"
+                                                            type="password"
+                                                            value={this.state.password}
+                                                            onChange={(event) => {
+                                                                this.checkIfValid();
+                                                                this.setState({
+                                                                    password: event.target.value,
+                                                                });
+                                                            }}
+                                                        />
+                                                        <AuthInput
+                                                            size="half"
+                                                            title="Confirm Password"
+                                                            id="inputConfirmPassword"
+                                                            placeholder="Confirm password"
+                                                            type="password"
+                                                            value={this.state.confirmPassword}
+                                                            onChange={(event) => {
+                                                                this.checkIfValid();
+                                                                this.setState({
+                                                                    confirmPassword: event.target.value,
+                                                                });
+                                                            }}
+                                                        />
+                                                    </div>
+                                                    <div className="form-group mt-4 mb-0">
+                                                        <button
+                                                            className="btn btn-primary btn-block"
+                                                            onClick={(event) => {
+                                                                event.preventDefault();
+                                                                this.setState({ loading: true });
+                                                                if (!this.state.isValid) {
+                                                                    this.setState({
+                                                                        errorMessage: 'All fields must be filled.',
+                                                                        loading: false,
                                                                     });
-                                                            } else {
-                                                                this.setState({
-                                                                    errorMessage: 'Passwords do not match.',
-                                                                });
-                                                            }
-                                                        }}
-                                                    >
-                                                        Create Account
-                                                    </button>
-                                                    {this.state.errorMessage ? (
-                                                        <p className="mt-3 text-danger">{this.state.errorMessage}</p>
-                                                    ) : null}
-                                                </div>
-                                            </form>}
+                                                                    return;
+                                                                }
+                                                                if (
+                                                                    this.state.password === this.state.confirmPassword
+                                                                ) {
+                                                                    firebase
+                                                                        .auth()
+                                                                        .createUserWithEmailAndPassword(
+                                                                            this.state.email,
+                                                                            this.state.password
+                                                                        )
+                                                                        .then((response) => {
+                                                                            this.props.onSetDisplayName(
+                                                                                `${this.state.firstName} ${this.state.lastName}`
+                                                                            );
+                                                                            response.user.updateProfile({
+                                                                                displayName: `${this.state.firstName} ${this.state.lastName}`,
+                                                                            });
+                                                                        })
+                                                                        .catch((err) => {
+                                                                            this.setState({
+                                                                                errorMessage: err.message,
+                                                                                loading: false,
+                                                                            });
+                                                                        });
+                                                                } else {
+                                                                    this.setState({
+                                                                        errorMessage: 'Passwords do not match.',
+                                                                    });
+                                                                }
+                                                            }}
+                                                        >
+                                                            Create Account
+                                                        </button>
+                                                        {this.state.errorMessage ? (
+                                                            <p className="mt-3 text-danger">
+                                                                {this.state.errorMessage}
+                                                            </p>
+                                                        ) : null}
+                                                    </div>
+                                                </form>
+                                            )}
                                         </div>
                                         <div className="card-footer text-center">
                                             <div className="small">

@@ -7,16 +7,20 @@ class TicketsTable extends Component {
     renderTicketRows(filter) {
         let ticketsElements = this.props.tickets;
         if (filter) {
-          ticketsElements = ticketsElements.filter(ticketObject => {
-            if (ticketObject.assignedToId === this.props.user.uid) {
-              return true;
-            }
-            return false;
-          })
+            ticketsElements = ticketsElements.filter((ticketObject) => {
+                if (ticketObject.assignedToId === this.props.user.uid) {
+                    return true;
+                }
+                return false;
+            });
         }
-        
+
         return ticketsElements.map((ticketObj) => {
-            const { id, bugName, severity, submittedBy, assignedTo, shortDescription } = ticketObj;
+            let assignedTo = ticketObj.assignedTo;
+            if (ticketObj.assignedTo === 'Select') {
+              assignedTo = "Unassigned";
+            }
+            const { id, bugName, severity, submittedBy, shortDescription } = ticketObj;
             return (
                 <TicketsTableRow
                     id={id}
@@ -34,7 +38,7 @@ class TicketsTable extends Component {
     render() {
         return (
             <DataTable
-                noDataMessage={<h5>There are currently no tickets. You can create a ticket in the "My Bugs" tab.</h5>}
+                noDataMessage={<h5>{this.props.noTicketsMessage}</h5>}
                 columnData={[
                     { label: 'Ticket Number', name: 'id' },
                     { label: 'Issue', name: 'bugName' },

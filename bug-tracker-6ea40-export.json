@@ -1,0 +1,112 @@
+{
+  "tickets" : [ {
+    "assignedTo" : "John Smith",
+    "assignedToId" : "IpiYdgOk54fdDBSTWYMmjvq8TZ52",
+    "bugName" : "Tickets Table Appearance",
+    "editedBy" : "David Frederick",
+    "editedById" : "NaxZuHlLMUbfsegqhhzCSeWBWUx2",
+    "editedTime" : "Mon Sep 28 2020 14:21:17",
+    "id" : 0,
+    "longDescription" : "",
+    "severity" : "Minor",
+    "shortDescription" : "Tickets table still appears when there are no tickets",
+    "status" : "In Progress",
+    "stepsToReproduce" : "1. Delete all tickets in Firebase\n2. Log in to Bug Tracker\n3. Visit Dashboard",
+    "submittedBy" : "David Frederick",
+    "submittedById" : "NaxZuHlLMUbfsegqhhzCSeWBWUx2",
+    "timeSubmitted" : "Fri Sep 25 2020 16:24:04"
+  }, {
+    "assignedTo" : "David Frederick",
+    "assignedToId" : "NaxZuHlLMUbfsegqhhzCSeWBWUx2",
+    "bugName" : "Create Bug Form Submits with Missing Field",
+    "id" : 1,
+    "longDescription" : "",
+    "severity" : "Moderate",
+    "shortDescription" : "Create bug form should not be able to submitted with required fields either empty or blank",
+    "stepsToReproduce" : "1. Click Submit New Bug in navbar\n2. Click submit to submit new empty ticket",
+    "submittedBy" : "David Frederick",
+    "submittedById" : "NaxZuHlLMUbfsegqhhzCSeWBWUx2",
+    "timeSubmitted" : "Fri Sep 25 2020 16:45:19"
+  }, {
+    "assignedTo" : "John Smith",
+    "assignedToId" : "IpiYdgOk54fdDBSTWYMmjvq8TZ52",
+    "bugName" : "Missing Fields Don't Show",
+    "id" : 2,
+    "longDescription" : "",
+    "severity" : "Minor",
+    "shortDescription" : "Missing fields on Create Bug Form don't show up in error",
+    "stepsToReproduce" : "1. Click Submit New Bug in navbar\n2. Submit form empty\n3. Error should appear above buttons at the bottom, but they don't",
+    "submittedBy" : "David Frederick",
+    "submittedById" : "NaxZuHlLMUbfsegqhhzCSeWBWUx2",
+    "timeSubmitted" : "Fri Sep 25 2020 16:46:56"
+  }, {
+    "assignedTo" : "David Frederick",
+    "assignedToId" : "NaxZuHlLMUbfsegqhhzCSeWBWUx2",
+    "bugName" : "Submit on Edit Fails",
+    "id" : 3,
+    "longDescription" : "",
+    "severity" : "Moderate",
+    "shortDescription" : "Clicking submit on edit bug screen fails",
+    "stepsToReproduce" : "1. Click on any ticket in tickets table\n2. Change any field to something not empty or Select\n3. Click submit to see app crash",
+    "submittedBy" : "David Frederick",
+    "submittedById" : "NaxZuHlLMUbfsegqhhzCSeWBWUx2",
+    "timeSubmitted" : "Fri Sep 25 2020 16:48:00"
+  }, {
+    "assignedTo" : "David Frederick",
+    "assignedToId" : "NaxZuHlLMUbfsegqhhzCSeWBWUx2",
+    "bugName" : "My Bugs Page Filter",
+    "id" : 4,
+    "longDescription" : "",
+    "severity" : "Minor",
+    "shortDescription" : "My Bugs page does not filter by user",
+    "stepsToReproduce" : "1. Go to My Bugs page\n2. You will see all tickets available, regardless of name",
+    "submittedBy" : "David Frederick",
+    "submittedById" : "NaxZuHlLMUbfsegqhhzCSeWBWUx2",
+    "timeSubmitted" : "Fri Sep 25 2020 16:49:00"
+  }, {
+    "assignedTo" : "David Frederick",
+    "assignedToId" : "NaxZuHlLMUbfsegqhhzCSeWBWUx2",
+    "bugName" : "Entries Changing on Tickets Table",
+    "editedBy" : "David Frederick",
+    "editedById" : "NaxZuHlLMUbfsegqhhzCSeWBWUx2",
+    "editedTime" : "Fri Sep 25 2020 16:51:07",
+    "id" : 5,
+    "longDescription" : "",
+    "severity" : "Moderate",
+    "shortDescription" : "Changing entries option when not on 1st page makes table act weird",
+    "stepsToReproduce" : "1. Go to tickets table\n2. Click on 3 at bottom of table\n3. Change entries shown selection to anything else",
+    "submittedBy" : "David Frederick",
+    "submittedById" : "NaxZuHlLMUbfsegqhhzCSeWBWUx2",
+    "timeSubmitted" : "Fri Sep 25 2020 16:49:55"
+  }, null, null, null, null, null, null, {
+    "assignedTo" : "John Smith",
+    "assignedToId" : "IpiYdgOk54fdDBSTWYMmjvq8TZ52",
+    "bugName" : "Table Search Field Crash",
+    "id" : 12,
+    "longDescription" : "Error Message: Cannot read property value of 'null'",
+    "severity" : "Severe",
+    "shortDescription" : "App crashes when a user starts to type in the search field",
+    "stepsToReproduce" : "1. Go to dashboard\n2. Type in search field of tickets table",
+    "submittedBy" : "David Frederick",
+    "submittedById" : "NaxZuHlLMUbfsegqhhzCSeWBWUx2",
+    "timeSubmitted" : "Sat Sep 26 2020 19:55:58"
+  }, {
+    "assignedTo" : "David Frederick",
+    "assignedToId" : "NaxZuHlLMUbfsegqhhzCSeWBWUx2",
+    "bugName" : "Ticket Table Count wrong after search cleared",
+    "id" : 13,
+    "longDescription" : "Upon clearing the search input in the tickets table, the amount of rows shown again is one less than the limiter in the top left",
+    "severity" : "Minor",
+    "shortDescription" : "After the search bar is cleared, the amount of rows showing is 1 too little",
+    "stepsToReproduce" : "1. Go to Dashboard\n2. Search using search bar in tickets table\n3. Press x to clear search term and observe ticket table rows/count",
+    "submittedBy" : "David Frederick",
+    "submittedById" : "NaxZuHlLMUbfsegqhhzCSeWBWUx2",
+    "timeSubmitted" : "Sat Sep 26 2020 21:52:03"
+  } ],
+  "users" : {
+    "NaxZuHlLMUbfsegqhhzCSeWBWUx2" : {
+      "displayName" : "David Frederick",
+      "uid" : "NaxZuHlLMUbfsegqhhzCSeWBWUx2"
+    }
+  }
+}

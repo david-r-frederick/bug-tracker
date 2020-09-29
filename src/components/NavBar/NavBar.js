@@ -4,13 +4,13 @@ import 'firebase/auth';
 import { REMOVE_REDUX_USER } from '../../store/actions/actionTypes';
 import { connect } from 'react-redux';
 import classes from './NavBar.module.css';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 
 class NavBar extends Component {
     state = {
-      width: 0,
-      height: 0,
-    }
+        width: 0,
+        height: 0,
+    };
 
     logout = () => {
         firebase
@@ -21,27 +21,26 @@ class NavBar extends Component {
             })
             .catch((err) => {
                 console.log(err.message);
-                console.log('Error is located in NavBar.js file, logout method.');
             });
     };
 
     componentDidMount() {
-      this.updateWindowDimensions();
-      window.addEventListener('resize', this.updateWindowDimensions);
+        this.updateWindowDimensions();
+        window.addEventListener('resize', this.updateWindowDimensions);
     }
-    
+
     componentWillUnmount() {
-      window.removeEventListener('resize', this.updateWindowDimensions);
+        window.removeEventListener('resize', this.updateWindowDimensions);
     }
-    
+
     updateWindowDimensions = () => {
-      this.setState({ width: window.innerWidth, height: window.innerHeight });
-    }
+        this.setState({ width: window.innerWidth, height: window.innerHeight });
+    };
 
     render() {
         return (
-            <nav className="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-                <a className="navbar-brand" href="/">
+            <nav className={`sb-topnav navbar navbar-expand navbar-${this.props.colorTheme} bg-${this.props.colorTheme}`}>
+                <a className="navbar-brand" href="/dashboard">
                     Bug Tracker
                 </a>
                 <button
@@ -62,9 +61,9 @@ class NavBar extends Component {
                 </button>
                 <ul className={`navbar-nav ml-auto ml-md-0 ${classes.topRightNavBarSection}`}>
                     <li className="nav-item">
-                      <Link className="btn btn-primary" to="/create">
-                        {this.state.width <= 500 ? '+' : 'Submit New Bug'}
-                      </Link>
+                        <Link className="btn btn-primary" to="/create">
+                            {this.state.width <= 500 ? '+' : 'Submit New Bug'}
+                        </Link>
                     </li>
                     <li className="nav-item dropdown">
                         <a
@@ -79,9 +78,9 @@ class NavBar extends Component {
                             <i className="fas fa-user fa-fw"></i>
                         </a>
                         <div className="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                            <button className="dropdown-item" onClick={() => this.setState({ redirect: '/settings' })}>
+                            <Link className="dropdown-item" to="/settings">
                                 Settings
-                            </button>
+                            </Link>
                             <div className="dropdown-divider"></div>
                             <button onClick={this.logout} className="dropdown-item">
                                 Logout
@@ -94,10 +93,16 @@ class NavBar extends Component {
     }
 }
 
+const mapStateToProps = (state) => {
+    return {
+        colorTheme: state.theme.color,
+    };
+};
+
 const mapDispatchToProps = (dispatch) => {
     return {
         onRemoveUser: () => dispatch({ type: REMOVE_REDUX_USER }),
     };
 };
 
-export default connect(null, mapDispatchToProps)(NavBar);
+export default connect(mapStateToProps, mapDispatchToProps)(NavBar);

@@ -11,6 +11,8 @@ import {
     SET_DISPLAY_NAME,
     SET_REDUX_USER,
     ADD_FIREBASE_USER_TO_LOCAL,
+    CLEAR_LOCAL_TICKETS,
+    SET_ADMIN
 } from './store/actions/actionTypes';
 import CreateBug from './containers/CreateBug/CreateBug';
 import Dashboard from './containers/Dashboard/Dashboard';
@@ -19,6 +21,9 @@ import EditBug from './containers/EditBug/EditBug';
 import NavBar from './components/NavBar/NavBar';
 import SideNavMain from './components/SideNav/SideNavMain';
 import MainFlowFooter from './components/MainFlowFooter';
+import PasswordReset from './containers/PasswordReset/PasswordReset';
+import Settings from './containers/Settings/Settings';
+import Reports from './containers/Reports/Reports';
 
 class App extends Component {
     componentDidMount() {
@@ -34,6 +39,9 @@ class App extends Component {
 
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
+                user.getIdTokenResult().then(idTokenResult => {
+                  this.props.onSetUserAdmin(!!idTokenResult.claims.admin);
+                });
                 user.getIdToken()
                     .then((token) => {
                         // set user display name for navbar
@@ -44,7 +52,7 @@ class App extends Component {
                     })
                     .then(() => {
                         //clear local tickets, then fetch all from firebase
-                        // this.props.onClearLocalTickets();
+                        this.props.onClearLocalTickets();
                         firebase
                             .database()
                             .ref(`/tickets`)
@@ -100,6 +108,8 @@ class App extends Component {
                                         <Route path="/create" component={CreateBug} />
                                         <Route path="/my-bugs" component={MyBugs} />
                                         <Route path="/edit" component={EditBug} />
+                                        <Route path="/settings" component={Settings} />
+                                        <Route path="/reports" component={Reports} />
                                         <Redirect to="/dashboard" />
                                     </Switch>
                                 </div>
@@ -114,6 +124,7 @@ class App extends Component {
                 <Switch>
                     <Route path="/login" component={Login} />
                     <Route path="/register" component={Register} />
+                    <Route path="/pwreset" component={PasswordReset} />
                     <Redirect to="/login" />
                 </Switch>
             );
@@ -135,15 +146,18 @@ const mapDispatchToProps = (dispatch) => {
         onSetUser: (token, user) => {
             dispatch({ type: SET_REDUX_USER, payload: { token, user } });
         },
+        onSetUserAdmin: (isAdmin) => {
+            dispatch({ type: SET_ADMIN, payload: { isAdmin }});
+        },
         onSetDisplayName: (displayName) => {
             dispatch({ type: SET_DISPLAY_NAME, payload: { displayName } });
         },
         onAddUserTicket: (ticket) => {
             dispatch({ type: ADD_USER_TICKET, payload: { ticket } });
         },
-        // onClearLocalTickets: () => {
-        //     dispatch({ type: CLEAR_LOCAL_TICKETS });
-        // },
+        onClearLocalTickets: () => {
+            dispatch({ type: CLEAR_LOCAL_TICKETS });
+        },
         onAddFirebaseUserToLocalList: (userObj) => {
             dispatch({ type: ADD_FIREBASE_USER_TO_LOCAL, payload: { userObj } });
         },

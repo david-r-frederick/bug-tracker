@@ -20,6 +20,7 @@ class EditBug extends Component {
         formIncomplete: false,
         missingFields: [],
         showModal: false,
+        status: 'Select',
     };
 
     componentDidMount() {
@@ -32,6 +33,7 @@ class EditBug extends Component {
             assignedToId,
             longDescription,
             stepsToReproduce,
+            status,
         } = currentTicketData;
         this.setState({
             bugName,
@@ -41,6 +43,7 @@ class EditBug extends Component {
             assignedToId,
             longDescription,
             stepsToReproduce,
+            status: status ? status : 'New',
         });
     }
 
@@ -53,6 +56,7 @@ class EditBug extends Component {
             assignedToId,
             longDescription,
             stepsToReproduce,
+            status,
         } = this.state;
         const currentTicketData = this.props.tickets.find((ticket) => ticket.id === this.props.location.state.id);
         const database = firebase.database();
@@ -69,15 +73,16 @@ class EditBug extends Component {
                 id,
                 submittedBy: currentTicketData.submittedBy,
                 submittedById: currentTicketData.submittedById,
+                // time example: Thu Sep 24 2020 09:18:18
                 timeSubmitted: currentTicketData.timeSubmitted,
                 editedBy: this.props.user.displayName,
                 editedById: this.props.user.uid,
-                // editedTime example: Thu Sep 24 2020 09:18:18
                 editedTime: new Date().toString().substring(0, 24),
+                status,
             })
-            // .then(() => {
-            //     this.props.onClearLocalTickets();
-            // })
+            .then(() => {
+                this.props.onClearLocalTickets();
+            })
             .then(() => {
                 database.ref(`tickets`).on('value', (snapShot) => {
                     snapShot.forEach((snap) => {
@@ -98,7 +103,7 @@ class EditBug extends Component {
         database
             .ref(`/tickets/${toBeDeletedId}`)
             .remove()
-            // .then(() => this.props.onClearLocalTickets())
+            .then(() => this.props.onClearLocalTickets())
             .then(() => {
                 database.ref(`tickets`).on('value', (snapShot) => {
                     snapShot.forEach((snap) => {
@@ -107,8 +112,10 @@ class EditBug extends Component {
                     });
                 });
             })
-            .then(() => this.setState({ redirect: '/my-bugs' }))
-            .then(() => console.log('TICKET DELETED SUCCESSFULLY'))
+            .then(() => {
+                console.log('TICKET DELETED SUCCESSFULLY');
+                this.setState({ redirect: '/my-bugs' });
+            })
             .catch((err) => console.log(err.message));
     }
 
@@ -118,18 +125,19 @@ class EditBug extends Component {
                 title="Are you sure you want to delete this ticket?"
                 showModal={this.state.showModal}
                 closeModal={() => this.setState({ showModal: false })}
-                deleteFunction={() => this.deleteTicketHandler()}
+                deleteFunction={this.deleteTicketHandler}
             />
         );
     }
 
     formIsValid = () => {
-        const { bugName, shortDescription, severity, stepsToReproduce } = this.state;
+        const { bugName, shortDescription, severity, stepsToReproduce, status } = this.state;
         const valuesWithHumanTitles = {
             'Name of Bug': bugName,
             'Short Description': shortDescription,
             Severity: severity,
             'Steps To Reproduce': stepsToReproduce,
+            'Status': status
         };
         const missingFieldsTitles = [];
         //Pushes friendly names of empty fields, then checks if all fields are filled
@@ -155,7 +163,7 @@ class EditBug extends Component {
     renderErrorMessage() {
         return this.state.formIncomplete ? (
             <p className="text-danger">
-                Form is incomplete. Please review fields: {this.state.missingFields.join(', ')}
+                Form is incomplete/incorrect. Please review fields: {this.state.missingFields.join(', ')}
             </p>
         ) : null;
     }
@@ -172,6 +180,7 @@ class EditBug extends Component {
                         <div className="form-row">
                             <Input
                                 title="Name of Bug"
+                                required={true}
                                 id="bugName"
                                 type="text"
                                 placeholder=""
@@ -181,6 +190,7 @@ class EditBug extends Component {
                             />
                             <Input
                                 title="Short Description"
+                                required={true}
                                 id="shortDescription"
                                 type="text"
                                 placeholder=""
@@ -194,6 +204,7 @@ class EditBug extends Component {
                         <div className="form-row">
                             <Select
                                 title="Severity"
+                                required={true}
                                 onChange={(event) => {
                                     this.setState({ severity: event.target.value });
                                 }}
@@ -204,10 +215,10 @@ class EditBug extends Component {
                             <Select
                                 title="Assigned To"
                                 onChange={(event) => {
-                                  let idToSet = 'select';
-                                  if (event.target.value !== 'Select') {
-                                    idToSet = this.props.users[event.target.selectedIndex - 1].uid;
-                                  }
+                                    let idToSet = 'select';
+                                    if (event.target.value !== 'Select') {
+                                        idToSet = this.props.users[event.target.selectedIndex - 1].uid;
+                                    }
                                     this.setState({
                                         assignedTo: event.target.value,
                                         assignedToId: idToSet,
@@ -215,6 +226,18 @@ class EditBug extends Component {
                                 }}
                                 options={['Select'].concat(this.props.users.map((userObj) => userObj.displayName))}
                                 value={this.state.assignedTo}
+                            />
+                        </div>
+                        <div className="form-row">
+                            <Select
+                                title="Status"
+                                required={true}
+                                width="full"
+                                onChange={(event) => {
+                                    this.setState({ status: event.target.value });
+                                }}
+                                options={['Select', 'New', 'In Progress', 'Completed']}
+                                value={this.state.status}
                             />
                         </div>
                         <div className="form-row">
@@ -231,6 +254,7 @@ class EditBug extends Component {
                         <div className="form-row">
                             <TextArea
                                 title="Steps to Reproduce"
+                                required={true}
                                 id="stepsToReproduce"
                                 type="text"
                                 placeholder=""
@@ -275,7 +299,7 @@ class EditBug extends Component {
                                     this.setState({ redirect: '/my-bugs' });
                                 }}
                                 type="button"
-                                className={`btn btn-default ${classes.editScreenBtn}`}
+                                className={`btn btn-secondary ${classes.editScreenBtn}`}
                             >
                                 Cancel
                             </button>
@@ -299,7 +323,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         onAddUserTicket: (ticket) => dispatch({ type: ADD_USER_TICKET, payload: { ticket } }),
-        // onClearLocalTickets: () => dispatch({ type: CLEAR_LOCAL_TICKETS }),
+        onClearLocalTickets: () => dispatch({ type: CLEAR_LOCAL_TICKETS }),
     };
 };
 

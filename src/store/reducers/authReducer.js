@@ -1,20 +1,4 @@
-import { SET_REDUX_USER, REMOVE_REDUX_USER, SET_DISPLAY_NAME } from '../actions/actionTypes';
-
-// const authStart = (state) => {
-//     return {};
-// };
-
-// const authSuccess = (state, action) => {
-//     return {};
-// };
-
-// const authFailure = (state, action) => {
-//     return {};
-// };
-
-// const authLogout = (state, action) => {
-//     return {};
-// };
+import { SET_REDUX_USER, REMOVE_REDUX_USER, SET_DISPLAY_NAME, SET_ADMIN } from '../actions/actionTypes';
 
 const initialState = {
     displayName: '',
@@ -40,6 +24,8 @@ const authReducer = (state = initialState, action) => {
             };
         case REMOVE_REDUX_USER:
             return { ...initialState };
+        case SET_ADMIN:
+            return {...state, isAdmin: action.payload.isAdmin };
         default:
             return state;
     }

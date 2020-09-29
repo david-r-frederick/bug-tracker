@@ -8,11 +8,13 @@ import { createStore, combineReducers } from 'redux';
 import authReducer from './store/reducers/authReducer';
 import ticketsReducer from './store/reducers/ticketsReducer';
 import usersReducer from './store/reducers/usersReducer';
+import themeReducer from './store/reducers/themeReducer';
 
 const rootReducer = combineReducers({
   auth: authReducer,
   tickets: ticketsReducer,
   users: usersReducer,
+  theme: themeReducer,
 });
 
 const store = createStore(rootReducer);

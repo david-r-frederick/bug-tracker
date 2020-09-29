@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import SideNavLink from './SideNavLink';
-import SideNavCollapse from './SideNavCollapse';
 import SideNavFooter from './SideNavFooter';
 import { connect } from 'react-redux';
 
@@ -8,7 +7,7 @@ class SideNavMain extends Component {
     render() {
         return (
             <div id="layoutSidenav_nav">
-                <nav className="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+                <nav className={`sb-sidenav accordion sb-sidenav-${this.props.colorTheme}`} id="sidenavAccordion">
                     <div className="sb-sidenav-menu">
                         <div className="nav">
                             <div className="sb-sidenav-menu-heading">CORE</div>
@@ -38,6 +37,7 @@ class SideNavMain extends Component {
 const mapStateToProps = (state) => {
     return {
         displayName: state.auth.displayName,
+        colorTheme: state.theme.color,
     };
 };
 
